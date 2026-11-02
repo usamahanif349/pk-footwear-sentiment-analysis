@@ -1,0 +1,10 @@
+pandas
+requests
+python-dotenv
+google-api-python-client
+pyspark
+scikit-learn
+matplotlib
+wordcloud
+plotly
+streamlit
