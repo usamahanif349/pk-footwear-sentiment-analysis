@@ -1,0 +1,14 @@
+              model  accuracy  macro_f1
+Logistic Regression     0.431     0.401
+        Naive Bayes     0.510     0.225
+
+Best: Logistic Regression
+              precision    recall  f1-score   support
+
+    negative       0.50      0.38      0.43        13
+     neutral       0.18      0.25      0.21        12
+    positive       0.58      0.54      0.56        26
+
+    accuracy                           0.43        51
+   macro avg       0.42      0.39      0.40        51
+weighted avg       0.47      0.43      0.44        51
