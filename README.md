@@ -1,5 +1,7 @@
 # Pakistani Footwear Brand Sentiment Analysis
 
+**Live dashboard:** https://pk-footwear-sentiment-analysis-kuphdsqeabs38rt56yt7nm.streamlit.app/
+
 Big data sentiment analysis of three Pakistani footwear brands (**Borjan, Servis, Ndure**) on multilingual (English / Roman Urdu / Urdu) YouTube comments and Google Maps reviews. Built for a Big Data course project.
 
 ## Pipeline
@@ -10,6 +12,7 @@ Big data sentiment analysis of three Pakistani footwear brands (**Borjan, Servis
 4. **Label:** Google Maps stars → negative (1-2), neutral (3), positive (4-5)
 5. **Model:** TF-IDF character n-grams + Logistic Regression / Naive Bayes, versus a pretrained multilingual transformer (XLM-R)
 6. **Scale test:** PySpark vs pandas benchmark on replicated data
+7. **Explore:** Streamlit dashboard with brand scorecards, aspect analysis (price, quality, comfort, size, design, staff, delivery; English and Roman Urdu keywords), outlet leaderboard, trends and customer quotes
 
 ## Data
 
@@ -56,6 +59,18 @@ Benchmark on the dataset replicated many times (this measures scalability; it is
 
 Spark's startup cost makes it slower on small data. They break even around 1M rows, and Spark is slightly ahead at 3.5M (run on Colab's free 2-core machine).
 
+## Dashboard
+
+Interactive Streamlit app (link at the top). Maps sentiment comes from star ratings, YouTube sentiment from the pretrained model.
+
+![Overview](reports/figures/dashboard_overview.png)
+![Aspects](reports/figures/dashboard_aspects.png)
+![Customer voices](reports/figures/dashboard_voices.png)
+
+**Aspect analysis:** each review is tagged with the topics it mentions using keyword lists, then net sentiment (% positive minus % negative) is computed per topic. Counts per topic are small, so this is a signal, not a verdict.
+
+Price is the most negative topic.
+
 ## Limitations
 
 - **Small labeled set** (203 rows), so scores are noisy and the test split is tiny.
@@ -63,13 +78,13 @@ Spark's startup cost makes it slower on small data. They break even around 1M ro
 - Maps data covers only a few outlets per brand (for example Borjan M M Alam Road and Ndure Lahore), so it is not a sample of the whole brand.
 - Roman Urdu detection is a simple word-list heuristic, so some Roman Urdu is counted as English.
 - Model predictions on YouTube are unverified, because the models learned from store reviews, which read differently from video comments.
+- Aspect detection uses keyword lists, so it misses some mentions.
 
 ## Next steps
 
 - Hand-label about 100 Servis comments as a proper test set
-- Add more outlets and sources
+- Add more outlets and sources (Servis has no Google Maps data yet)
 - Fine-tune a multilingual model on the labeled data
-- Aspect analysis (comfort, sizing, durability, price) and a Streamlit dashboard
 
 ## Run it
 
@@ -79,6 +94,7 @@ cp .env.example .env        # add your YOUTUBE_API_KEY
 python src/scraping/scrape_youtube.py
 python src/processing/load_maps.py
 python src/models/train_and_report.py
+streamlit run src/dashboard/app.py
 ```
 
 The transformer and Spark steps are in `notebooks/Brand_Sentiment_Colab.ipynb` (run on Google Colab).
